@@ -1,0 +1,12 @@
+# Entornos virtuales
+.venv/
+venv/
+ENV/
+
+# Caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de notas personales
+notas.xmc

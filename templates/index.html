@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador de Grafo</title>
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- Librería externa Cytoscape.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.26.0/cytoscape.min.js"></script>
+</head>
+
+<body>
+    <div id="body">
+        <div id="menu-lateral" class="card">
+            <h1 class="grafo-titulo">Métodos de Búsqueda</h1>
+
+            <div id="metodos" class="black-card">
+                <label for="select-algoritmo">Algoritmo:</label>
+                <select id="select-algoritmo">
+                    <option value="ancho">Búsqueda a lo ancho</option>
+                    <option value="profundidad">Búsqueda en profundidad</option>
+                    <option value="escalada">Búsqueda escalada simple</option>
+                    <option value="primero_mejor">Búsqueda primero el mejor</option>
+                </select>
+
+                <label for="select-sentido">Sentido:</label>
+                <select id="select-sentido">
+                    <option value="horario">Horario</option>
+                    <option value="antihorario">Antihorario</option>
+                </select>
+            </div>
+
+            <div id="nodos" class="black-card">
+                <label for="nodo-inicio">Nodo Inicial:</label>
+                <input type="number" id="nodo-inicio" min="1" max="28" value="1">
+
+                <label for="nodo-fin">Nodo Final:</label>
+                <input type="number" id="nodo-fin" min="1" max="28" value="28">
+
+                <button id="btn-buscar">Buscar</button>
+            </div>
+
+            <div id="ruta" class="black-card">
+                <h3>Ruta obtenida:</h3>
+                <p id="resultado-ruta">-</p>
+            </div>
+
+            <div id="txt" class="black-card">
+                <h3>Pasos (Tabla):</h3>
+                <pre id="contenedor-pasos"
+                    style="font-family: monospace; font-size: 11px; overflow-x: auto; white-space: pre;"></pre>
+            </div>
+        </div>
+
+        <div id="grafo-content" class="card">
+            <h1 class="grafo-titulo">Ruta en el Grafo</h1>
+            <div id="cy"></div>
+            <div id="simbologia"></div>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.26.0/cytoscape.min.js"></script>
+    <script src="/static/app.js"></script>
+</body>
+
+</html>
