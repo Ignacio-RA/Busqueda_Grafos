@@ -45,7 +45,7 @@ def es_horario(grafo, nodo_inicio, nodo_final):
 
         hubo_mejora = False
 
-        # Evaluamos y agregamos UN vecino a la vez
+        # Evaluamos y agregamos un vecino a la vez
         for vecino in vecinos_horarios:
             costo_vecino = obtener_distancia(vecino, fin)
 
@@ -131,7 +131,7 @@ def es_antihorario(grafo, nodo_inicio, nodo_final):
 
         hubo_mejora = False
 
-        # Evaluamos y agregamos UN vecino a la vez en sentido antihorario
+        # Evaluamos y agregamos un vecino a la vez en sentido antihorario
         for vecino in vecinos_antihorarios:
             costo_vecino = obtener_distancia(vecino, fin)
 

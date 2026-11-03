@@ -9,6 +9,7 @@ from utilGrafo import cargar_grafo, cargar_grafo_cytoscape, POSICIONES_NODOS
 from ba import ba_horario, ba_antihorario
 from bp import bp_horario, bp_antihorario
 from es import es_horario, es_antihorario
+from pm import pm_horario, pm_antihorario
 
 app = FastAPI()
 # Servir archivos estáticos (CSS, JS, imágenes)
@@ -34,8 +35,8 @@ MAPA_BUSQUEDAS = {
     ("profundidad", "antihorario"): bp_antihorario,
     ("escalada", "horario"): es_horario,
     ("escalada", "antihorario"): es_antihorario,
-    #("primero_mejor", "horario"): primero_mejor_horario,
-    #("primero_mejor", "antihorario"): primero_mejor_antihorario,
+    ("primero_mejor", "horario"): pm_horario,
+    ("primero_mejor", "antihorario"): pm_antihorario,
 }
 
 @app.get("/api/grafo")
