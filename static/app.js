@@ -48,14 +48,22 @@ async function inicializarGrafo() {
                         'source-arrow-shape': 'triangle'
                     }
                 },
+                // Estilo para los NODOS de la ruta
                 {
                     selector: '.highlighted',
+                    style: {
+                        'border-color': '#ff0000',
+                        'background-color': '#ffcccc',
+                        'border-width': 3
+                    }
+                },
+                // Estilo para las ARISTAS de la ruta
+                {
+                    selector: '.highlighted-edge',
                     style: {
                         'line-color': '#ff0000',
                         'target-arrow-color': '#ff0000',
                         'source-arrow-color': '#ff0000',
-                        'border-color': '#ff0000',
-                        'background-color': '#ffcccc',
                         'width': 3.5
                     }
                 }
@@ -76,39 +84,45 @@ async function ejecutarBusqueda() {
     const inicio = parseInt(document.getElementById('nodo-inicio').value);
     const fin = parseInt(document.getElementById('nodo-fin').value);
 
-    // Petición a FastAPI
-    const response = await fetch('/api/buscar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ algoritmo, sentido, inicio, fin })
-    });
+    try {
+        // Petición a FastAPI
+        const response = await fetch('/api/buscar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ algoritmo, sentido, inicio, fin })
+        });
 
-    const data = await response.json();
-    const ruta = data.ruta; // Arreglo de enteros [1, 6, 16, ...]
+        const data = await response.json();
+        const ruta = data.ruta; // Puede ser un Array o null
 
-    // Desplegar la ruta
-    document.getElementById('resultado-ruta').innerText = data.ruta ? data.ruta.join(' ➔ ') : 'Ruta no encontrada';
+        // Desplegar la ruta o aviso si no existe
+        document.getElementById('resultado-ruta').innerText = ruta ? ruta.join(' ➔ ') : 'Ruta no encontrada';
 
-    // Desplegar la tabla ASCII preservando espacios y saltos de línea
-    document.getElementById('contenedor-pasos').textContent = data.pasos;
+        // Desplegar la tabla ASCII preservando espacios y saltos de línea
+        document.getElementById('contenedor-pasos').textContent = data.pasos || '';
 
-    // --- C. Resaltar en Cytoscape ---
-    if (cy) {
-        // Limpiar resaltado anterior
-        cy.elements().removeClass('highlighted');
+        // --- Resaltar en Cytoscape ---
+        if (cy) {
+            // Limpiar resaltado anterior (sintaxis corregida con espacio)
+            cy.elements().removeClass('highlighted highlighted-edge');
 
-        // Resaltar nodos y conexiones de la ruta
-        for (let i = 0; i < ruta.length; i++) {
-            const nodoActual = String(ruta[i]);
-            cy.getElementById(nodoActual).addClass('highlighted');
+            // Validar que la ruta existe antes de iterar
+            if (ruta && ruta.length > 0) {
+                for (let i = 0; i < ruta.length; i++) {
+                    const nodoActual = String(ruta[i]);
+                    cy.getElementById(nodoActual).addClass('highlighted');
 
-            if (i < ruta.length - 1) {
-                const nodoSig = String(ruta[i + 1]);
-                // Buscar arista en cualquier dirección (u-v o v-u)
-                const edge = cy.elements(`edge[source="${nodoActual}"][target="${nodoSig}"], edge[source="${nodoSig}"][target="${nodoActual}"]`);
-                if (edge.length) edge.addClass('highlighted');
+                    if (i < ruta.length - 1) {
+                        const nodoSig = String(ruta[i + 1]);
+                        // Buscar la arista sin importar su orientación de origen/destino
+                        const edge = cy.elements(`edge[source="${nodoActual}"][target="${nodoSig}"], edge[source="${nodoSig}"][target="${nodoActual}"]`);
+                        if (edge.length) edge.addClass('highlighted-edge');
+                    }
+                }
             }
         }
+    } catch (err) {
+        console.error("Error al ejecutar la búsqueda:", err);
     }
 }
 
